@@ -1,6 +1,7 @@
 """Set of Proxy Log Classes for various log types."""
 import re
 import os
+from distro_info import UbuntuDistroInfo
 
 
 class ISO:
@@ -20,6 +21,12 @@ class ISO:
         self._parse_entry(entry)
         if self.valid:
             file = os.path.basename(self.target)
+            codename = file.split('-')[0]
+            all_dists = UbuntuDistroInfo().get_all()
+            if codename in all_dists:
+                self.valid = False
+                return
+
             self.release = '.'.join(file.split('-')[1].split('.')[0:2])
             self.flavor = file.split('-')[2]
             self.arch = file.split('-')[3].split('.')[0]
