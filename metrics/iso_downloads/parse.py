@@ -28,10 +28,6 @@ def run(logs_dir, dryrun=False):
         rfc3339_date = datetime.strptime(date, '%Y%m%d').isoformat('T') + 'Z'
         LOG.info('%s:%s %s', server, mirror, date)
 
-        if server == 'cdimage':
-            print('Skipping cdimage mirror: need better parsing')
-            continue
-
         influx = None
         if not ARGS.dryrun:
             influx = influxdb_connect()
