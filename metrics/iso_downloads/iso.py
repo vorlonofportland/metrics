@@ -51,6 +51,9 @@ class ISO:
         except IndexError:
             self.target = ''
 
+        # if there is a query string thanks to download.u.c, strip it off.
+        self.target = self.target.split('?')[0]
+
         if (self.target.endswith('iso') or self.target.endswith ('img.xz') \
             or self.target.endswith('img.gz')) and self.status == 200:
             self.valid = True
