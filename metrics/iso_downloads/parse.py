@@ -91,29 +91,33 @@ def stats(server, mirror, date, proxy_data):
 
     results = defaultdict(make_dict)
     for log in proxy_data:
-        if results[log.release][log.arch][log.flavor]:
-            results[log.release][log.arch][log.flavor] += 1
+        if results[log.release][log.product][log.arch][log.flavor][log.subarch]:
+            results[log.release][log.product][log.arch][log.flavor][log.subarch] += 1
         else:
-            results[log.release][log.arch][log.flavor] = 1
+            results[log.release][log.product][log.arch][log.flavor][log.subarch] = 1
 
-    for release, arches in results.items():
-        for arch, flavors in arches.items():
-            for flavor, downloads in flavors.items():
-                entry = {
-                    "measurement": '%s_%s' % (METRIC, server),
-                    "tags": {
-                        "mirror": mirror,
-                        "release": release,
-                        "arch": arch,
-                        "flavor": flavor,
-                    },
-                    "fields": {
-                        "downloads": downloads,
-                    },
-                    "time": date
-                }
+    for release, products in results.items():
+        for product, arches in products.items():
+            for arch, flavors in arches.items():
+                for flavor, subarches in flavors.items():
+                    for subarch, downloads in subarches.items():
+                        entry = {
+                            "measurement": '%s_%s' % (METRIC, server),
+                            "tags": {
+                                "mirror": mirror,
+                                "product": product,
+                                "release": release,
+                                "arch": arch,
+                                "subarch": subarch,
+                                "flavor": flavor,
+                            },
+                            "fields": {
+                                "downloads": downloads,
+                            },
+                            "time": date
+                        }
 
-                data.append(entry)
+                        data.append(entry)
 
     return data
 
