@@ -28,6 +28,11 @@ class ISO:
                 return
 
             re_match = re.match(r'^(\S*)-([\d.]*)-([^.]*)\.', file)
+            if not re_match:
+                # a few oddball images we don't care about, like
+                # 14.09-factory-preinstalled-system-armel+manta.img
+                self.valid = False
+                return
             self.product = re_match[1]
             self.release = re_match[2]
             try:
