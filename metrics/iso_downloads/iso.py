@@ -27,16 +27,20 @@ class ISO:
                 self.valid = False
                 return
 
-            self.release = '.'.join(file.split('-')[1].split('.')[0:2])
-            self.flavor = file.split('-')[2]
-            self.arch = file.split('-')[3].split('.')[0]
+            re_match = re.match(r'^(\S*)-([\d.]*)-([^.]*)\.', file)
+            self.product = re_match[1]
+            self.release = re_match[2]
+            try:
+                self.flavor,self.arch = re_match[3].rsplit('-', maxsplit=1)
+            except:
+                self.flavor = ''
+                self.arch = re_match[3]
 
-            # special handling of 'live-server'
-            if self.flavor == 'live':
-                self.flavor = '%s-%s' % (
-                    file.split('-')[2], file.split('-')[3]
-                )
-                self.arch = file.split('-')[4].split('.')[0]
+            # extract a subarch if any
+            try:
+                self.arch, self.subarch = self.arch.split('+')
+            except:
+                self.subarch = ''
 
     def __str__(self):
         """Print out object similar to proxy log would."""
