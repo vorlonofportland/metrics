@@ -19,33 +19,35 @@ class ISO:
         self.valid = False
 
         self._parse_entry(entry)
-        if self.valid:
-            file = os.path.basename(self.target)
-            codename = file.split('-')[0]
-            all_dists = UbuntuDistroInfo().get_all()
-            if codename in all_dists:
-                self.valid = False
-                return
+        if not self.valid:
+            return
 
-            re_match = re.match(r'^(\S*)-([\d.]*)-([^.]*)\.', file)
-            if not re_match:
-                # a few oddball images we don't care about, like
-                # 14.09-factory-preinstalled-system-armel+manta.img
-                self.valid = False
-                return
-            self.product = re_match[1]
-            self.release = re_match[2]
-            try:
-                self.flavor,self.arch = re_match[3].rsplit('-', maxsplit=1)
-            except:
-                self.flavor = ''
-                self.arch = re_match[3]
+        file = os.path.basename(self.target)
+        codename = file.split('-')[0]
+        all_dists = UbuntuDistroInfo().get_all()
+        if codename in all_dists:
+            self.valid = False
+            return
 
-            # extract a subarch if any
-            try:
-                self.arch, self.subarch = self.arch.split('+')
-            except:
-                self.subarch = ''
+        re_match = re.match(r'^(\S*)-([\d.]*)-([^.]*)\.', file)
+        if not re_match:
+            # a few oddball images we don't care about, like
+            # 14.09-factory-preinstalled-system-armel+manta.img
+            self.valid = False
+            return
+        self.product = re_match[1]
+        self.release = re_match[2]
+        try:
+            self.flavor,self.arch = re_match[3].rsplit('-', maxsplit=1)
+        except:
+            self.flavor = ''
+            self.arch = re_match[3]
+
+        # extract a subarch if any
+        try:
+            self.arch, self.subarch = self.arch.split('+')
+        except:
+            self.subarch = ''
 
     def __str__(self):
         """Print out object similar to proxy log would."""
