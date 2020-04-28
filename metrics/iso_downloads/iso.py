@@ -49,7 +49,7 @@ class ISO:
         except:
             self.subarch = ''
 
-        ua_match = re.match(r'.*"([^#]*)"$', entry)
+        ua_match = re.match(r'.*"([^"]*)"$', entry)
         if ua_match[1] == 'Mozilla/5.0' and self.subarch.startswith('raspi'):
             self.ua = 'raspi-imager'
         else:
