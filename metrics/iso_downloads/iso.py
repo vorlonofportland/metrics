@@ -49,6 +49,12 @@ class ISO:
         except:
             self.subarch = ''
 
+        ua_match = re.match(r'.*"([^#]*)"$', entry)
+        if ua_match[1] == 'Mozilla/5.0' and self.subarch.startswith('raspi'):
+            self.ua = 'raspi-imager'
+        else:
+            self.ua = ''
+
     def __str__(self):
         """Print out object similar to proxy log would."""
         return ('[%s] %s' % (self.status, self.target))
