@@ -61,6 +61,9 @@ class ISO:
 
     def _parse_entry(self, entry):
         """Parse a log entry into its parts."""
+        # ignore HTTP HEAD requests which get a 200 but are not downloads.
+        if entry.find('GET') < 0:
+            return
         self.status = int(re.findall(r'\s(\d{1,3})\s', entry)[0])
 
         try:
