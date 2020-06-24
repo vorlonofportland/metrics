@@ -50,9 +50,10 @@ class ISO:
             self.subarch = ''
 
         ua_match = re.match(r'.*"([^"]*)"$', entry)
-        if (ua_match[1] == 'Mozilla/5.0' and self.subarch.startswith('raspi')
-            or ua_match[1].find('rpi-imager') >= 0):
-            self.ua = 'raspi-imager'
+        if ua_match and ((ua_match[1] == 'Mozilla/5.0' and
+                          self.subarch.startswith('raspi')
+                or ua_match[1].find('rpi-imager') >= 0)):
+                self.ua = 'raspi-imager'
         else:
             self.ua = ''
 
