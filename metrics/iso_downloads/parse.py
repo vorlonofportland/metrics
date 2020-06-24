@@ -111,7 +111,7 @@ def stats(server, mirror, date, proxy_data):
                                     "arch": arch,
                                     "subarch": subarch,
                                     "flavor": flavor,
-                                    "user-agent": agent,
+                                    "user_agent": agent,
                                 },
                                 "fields": {
                                     "downloads": downloads,
