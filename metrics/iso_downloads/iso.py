@@ -80,6 +80,14 @@ class ISO:
            and self.status == 200:
             self.valid = True
 
+        if self.valid == True:
+            size = int(re.findall(r'\".+?\" 200 (\d+)', entry)[0])
+            if size < 80000:
+                # Short reads, which we have had a lot of recently; don't
+                # count these as downloads as it's very unusual for a real
+                # download to get so little data at a time
+                self.valid = False
+
     def csv(self):
         """Return entry as CSV."""
         return '%s %s' % (self.status, self.target)
